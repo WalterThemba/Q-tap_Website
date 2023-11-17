@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecturer Availability Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Lecturer Dashboard Section -->
+        <div class="lecturer-section">
+            <h1>Lecturer Availability Dashboard</h1>
+            <div class="availability-form">
+                <h2>Add Your Availability</h2>
+                <label for="lecturerName">Name:</label>
+                <input type="text" id="lecturerName">
+                <label for="lecturerEmail">Email:</label>
+                <input type="email" id="lecturerEmail">
+                <label for="venue">Venue/Room:</label>
+                <input type="text" id="venue">
+                <label for="startTime">Start Time:</label>
+                <input type="time" id="startTime">
+                <label for="endTime">End Time:</label>
+                <input type="time" id="endTime">
+                <button id="addAvailability">Add Availability</button>
+            </div>
+            <div id="availabilitySlots"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

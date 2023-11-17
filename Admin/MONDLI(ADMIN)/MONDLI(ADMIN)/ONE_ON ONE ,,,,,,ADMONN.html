@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecturer Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .session {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .accept-button {
+            background-color: green;
+            color: white;
+        }
+
+        .reject-button {
+            background-color: red;
+            color: white;
+        }
+
+        #calendar {
+            margin-top: 20px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>One-on-One Session Management</h1>
+        <div id="sessionsList"></div>
+        <div id="calendar"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const sessionsList = document.getElementById('sessionsList');
+
+            // Sample sessions data (simulated without PHP)
+            const sessions = [
+                { id: 1, studentName: 'John Doe', date: '2023-12-01' },
+                { id: 2, studentName: 'Alice Smith', date: '2023-12-05' }
+                // Add more sessions as needed
+            ];
+
+            const otherCommitments = [
+                { title: 'Graduation Day', start: '2023-12-15' },
+                { title: 'Team Meeting', start: '2023-12-10', end: '2023-12-10' }
+                // Add more commitments as needed
+            ];
+
+            const events = [...sessions.map(session => ({
+                title: session.studentName,
+                start: session.date,
+                id: session.id
+            })), ...otherCommitments];
+
+            // Display sessions
+            function displaySessions() {
+                sessionsList.innerHTML = '';
+                sessions.forEach(session => {
+                    const sessionItem = document.createElement('div');
+                    sessionItem.className = 'session';
+                    sessionItem.innerHTML = `
+                        <p><strong>Student Name:</strong> ${session.studentName}</p>
+                        <p><strong>Date:</strong> ${session.date}</p>
+                        <button class="accept-button" onclick="acceptSession(${session.id})">Accept</button>
+                        <button class="reject-button" onclick="rejectSession(${session.id})">Reject</button>
+                    `;
+                    sessionsList.appendChild(sessionItem);
+                });
+            }
+
+            // Initialize FullCalendar
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                events: events,
+                eventClick: function (event) {
+                    // Handle event click (session details, accept/reject functionality, etc.)
+                    console.log('Event clicked:', event);
+                }
+            });
+
+            // Accept session function
+            function acceptSession(sessionId) {
+                // Implement logic to mark the session as accepted
+                // Refresh sessions list after accepting
+                // For now, let's just log the accepted session ID
+                console.log(`Session ${sessionId} accepted.`);
+            }
+
+            // Reject session function
+            function rejectSession(sessionId) {
+                // Implement logic to mark the session as rejected
+                // Refresh sessions list after rejecting
+                // For now, let's just log the rejected session ID
+                console.log(`Session ${sessionId} rejected.`);
+            }
+
+            // Fetch sessions and display on page load
+            displaySessions();
+        });
+    </script>
+</body>
+</html>

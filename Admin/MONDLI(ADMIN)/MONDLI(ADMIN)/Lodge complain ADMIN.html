@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .complaint {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .resolved {
+            background-color: #d4edda; /* Light green */
+        }
+
+        .unsolved {
+            background-color: #f2dede; /* Light red */
+        }
+
+        .new {
+            background-color: #fcf8e3; /* Light yellow */
+        }
+
+        .filter-buttons {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Complaints</h1>
+        <div class="filter-buttons">
+            <button id="allBtn">All Complaints</button>
+            <button id="newBtn">New Complaints</button>
+            <button id="unsolvedBtn">Unsolved Complaints</button>
+            <button id="resolvedBtn">Resolved Complaints</button>
+        </div>
+        <div id="complaintsList"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const complaintsList = document.getElementById('complaintsList');
+            const allBtn = document.getElementById('allBtn');
+            const newBtn = document.getElementById('newBtn');
+            const unsolvedBtn = document.getElementById('unsolvedBtn');
+            const resolvedBtn = document.getElementById('resolvedBtn');
+            
+            const complaints = [
+                { id: 1, studentNumber: '12345', subject: 'Issue with Schedule', description: 'I cannot attend classes on Mondays.', resolved: false, timestamp: '2023-12-01T10:30:00' },
+                { id: 2, studentNumber: '67890', subject: 'Technical Problem', description: 'Cannot submit assignments through the portal.', resolved: false, timestamp: '2023-12-02T14:15:00' },
+                { id: 3, studentNumber: '54321', subject: 'Network Connectivity', description: 'Unable to connect to the campus Wi-Fi.', resolved: false, timestamp: '2023-12-03T09:45:00' },
+                { id: 4, studentNumber: '98765', subject: 'Library Access', description: 'Issues with accessing online library resources.', resolved: true, timestamp: '2023-12-04T11:20:00' },
+                { id: 5, studentNumber: '11111', subject: 'Account Login', description: 'Cannot log in to the student portal.', resolved: true, timestamp: '2023-12-05T16:30:00' },
+            ];
+
+            function displayComplaints(complaintsData, resolvedColor, unsolvedColor, newColor, showResolvedButton) {
+                complaintsList.innerHTML = '';
+                complaintsData.forEach(complaint => {
+                    const complaintItem = document.createElement('div');
+                    complaintItem.className = 'complaint';
+                    if (complaint.resolved) {
+                        complaintItem.classList.add('resolved');
+                        complaintItem.style.backgroundColor = resolvedColor;
+                    } else if (!complaint.resolved) {
+                        if (complaintItem.classList.contains('new')) {
+                            complaintItem.classList.remove('new');
+                        }
+                        complaintItem.classList.add('unsolved');
+                        complaintItem.style.backgroundColor = unsolvedColor;
+                    } else {
+                        if (complaintItem.classList.contains('unsolved')) {
+                            complaintItem.classList.remove('unsolved');
+                        }
+                        complaintItem.classList.add('new');
+                        complaintItem.style.backgroundColor = newColor;
+                    }
+                    complaintItem.innerHTML += `
+                        <p><strong>Student Number:</strong> ${complaint.studentNumber}</p>
+                        <p><strong>Subject:</strong> ${complaint.subject}</p>
+                        <p><strong>Description:</strong> ${complaint.description}</p>
+                        <p><strong>Submitted At:</strong> ${complaint.timestamp}</p>
+                    `;
+                    if (!complaint.resolved && showResolvedButton) {
+                        complaintItem.innerHTML += `<button onclick="markResolved(${complaint.id}, 'Mark Resolved')">Mark Resolved</button>`;
+                    }
+                    complaintsList.appendChild(complaintItem);
+                });
+            }
+
+            allBtn.addEventListener('click', () => displayComplaints(complaints, '', '', '', true));
+            newBtn.addEventListener('click', () => displayComplaints(complaints.filter(complaint => !complaint.resolved), '', '', '#fcf8e3', false));
+            unsolvedBtn.addEventListener('click', () => displayComplaints(complaints.filter(complaint => complaint.resolved === false), '', '#f2dede', '', true));
+            resolvedBtn.addEventListener('click', () => displayComplaints(complaints.filter(complaint => complaint.resolved), '#d4edda', '', '', true));
+
+            // Show all complaints by default
+            displayComplaints(complaints, '', '', '', true);
+        });
+        
+        function markResolved(id, label) {
+            const complaintIndex = complaints.findIndex(complaint => complaint.id === id);
+            if (complaintIndex !== -1) {
+                complaints[complaintIndex].resolved = !complaints[complaintIndex].resolved;
+                if (complaints[complaintIndex].resolved) {
+                    alert(`${label} - Complaint ID ${id} marked resolved.`);
+                } else {
+                    alert(`${label} - Complaint ID ${id} marked unsolved.`);
+                }
+                displayComplaints(complaints, '#d4edda', '#f2dede', '#fcf8e3', true);
+            }
+        }
+    </script>
+</body>
+</html>
